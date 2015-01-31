@@ -39,6 +39,6 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
-        android:id="@+id/editText"
+        android:id="@+id/password"
         android:layout_gravity="center_horizontal|bottom" />
 </FrameLayout>

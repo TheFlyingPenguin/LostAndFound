@@ -3,34 +3,35 @@ package com.example.ajklen.lostandfound;
 import android.app.Dialog;
 import android.content.Intent;
 import android.location.Location;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
 
-public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends ActionBarActivity implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
 
     private static final int ACTIVITY_GOOGLE_PLAY = 1;
     private GoogleApiClient googleClient;
     private TextView textView;
+    private EditText name;
+    private EditText password;
+    private Button submit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,10 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         }
 
         textView = (TextView)findViewById(R.id.textView);
+        name = (EditText)findViewById(R.id.nameField);
+        password = (EditText)findViewById(R.id.password);
+        submit.setOnClickListener(this);
+        submit = (Button)findViewById(R.id.buttonSubmit);
 
         googleClient =  new GoogleApiClient.Builder(MainActivity.this)
                 .addConnectionCallbacks(this)
@@ -56,6 +61,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         super.onStart();
         googleClient.connect();
     }
+
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -129,6 +135,14 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v==submit){
+            WebInterface web = new WebInterface(this);
+            web.makeRequest();
+        }
     }
 
     /**
