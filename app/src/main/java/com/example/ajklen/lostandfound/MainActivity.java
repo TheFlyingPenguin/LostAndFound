@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,22 +12,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
 
     private static final int ACTIVITY_GOOGLE_PLAY = 1;
+
+    public static final String MAP_NAME = "Res";
+    public static final String MAP_LAT = "Lat";
+    public static final String MAP_LONG = "Long";
+
     private GoogleApiClient googleClient;
     private TextView textView;
 
@@ -49,9 +52,6 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-
-        Intent intent = new Intent(this, MapActivity.class);
-        startActivity(intent);
     }
 
     @Override
@@ -88,12 +88,27 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     }
 
     public void getCoord(View v){
-        Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                googleClient);
-        if (lastLocation != null) {
-            Log.d("latitude", String.valueOf(lastLocation.getLatitude()));
+        Location lastLocation = getLocation();
+        if (lastLocation!=null) {
             textView.setText(String.valueOf(lastLocation.getLatitude())+"\n"+String.valueOf(lastLocation.getLongitude()));
         }
+    }
+
+    private Location getLocation(){
+        return LocationServices.FusedLocationApi.getLastLocation(googleClient);
+    }
+
+    public void createButton(View v){
+        Location lastLocation = getLocation();
+        Intent intent = new Intent(this, CreateActivity.class);
+        if (lastLocation!=null){
+            intent.putExtra(CreateActivity.LAT, lastLocation.getLatitude());
+            intent.putExtra(CreateActivity.LON, lastLocation.getLongitude());
+        }else {
+            Log.e("getMap", "Location not found.");
+        }
+
+        startActivity(intent);
     }
 
 
