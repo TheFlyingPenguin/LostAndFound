@@ -29,9 +29,16 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import com.example.ajklen.lostandfound.logger.*;
 
+import javax.xml.transform.Result;
 
-public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+interface OnTaskCompleted {
+    // you can define any parameter as per your requirement
+    public void callback(String result);
+}
+
+public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, OnTaskCompleted {
 
 
     private static final int ACTIVITY_GOOGLE_PLAY = 1;
@@ -42,6 +49,8 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     private GoogleApiClient googleClient;
     private TextView textView;
+
+    private int mChars = 500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +70,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 .addApi(LocationServices.API)
                 .build();
 
-        new DownloadTask().execute("http://www.google.com");
+        new DownloadTask(this).execute("http://www.google.com");
     }
 
     @Override
@@ -159,6 +168,11 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     }
 
+    @Override
+    public void callback(String result) {
+
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -177,18 +191,31 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         }
     }
 
-
-
     /**
      * Implementation of AsyncTask, to fetch the data in the background away from
      * the UI thread.
      */
     private class DownloadTask extends AsyncTask<String, Void, String> {
+        OnTaskCompleted listener;
+        public DownloadTask(OnTaskCompleted listener){
+            this.listener=listener;
+        }
+
+        // required methods
+
+
+        protected void onPostExecute(Result r){
+            try {
+                listener.callback(this.get());
+            }catch (Exception e){
+                Log.e("DownloadTask", "Download read before completion!");
+            }
+        }
 
         @Override
         protected String doInBackground(String... urls) {
             try {
-                return loadFromNetwork(urls[0], 500);
+                return loadFromNetwork(urls[0]);
             } catch (IOException e) {
                 return getString(R.string.connection_error);
             }
@@ -196,13 +223,13 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     }
 
     /** Initiates the fetch operation. */
-    private String loadFromNetwork(String urlString, int b) throws IOException {
+    private String loadFromNetwork(String urlString) throws IOException {
         InputStream stream = null;
         String str ="";
 
         try {
             stream = downloadUrl(urlString);
-            str = readIt(stream, b);
+            str = readIt(stream, mChars);
         } finally {
             if (stream != null) {
                 stream.close();
@@ -247,4 +274,24 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         reader.read(buffer);
         return new String(buffer);
     }
+
+    /** Create a chain of targets that will receive log data */
+    /*public void initializeLogging() {
+
+        // Using Log, front-end to the logging chain, emulates
+        // android.util.log method signatures.
+
+        // Wraps Android's native log framework
+        LogWrapper logWrapper = new LogWrapper();
+        Log.setLogNode(logWrapper);
+
+        // A filter that strips out everything except the message text.
+        MessageOnlyLogFilter msgFilter = new MessageOnlyLogFilter();
+        logWrapper.setNext(msgFilter);
+
+        // On screen logging via a fragment with a TextView.
+        mLogFragment =
+                (LogFragment) getSupportFragmentManager().findFragmentById(R.id.log_fragment);
+        msgFilter.setNext(mLogFragment.getLogView());
+    }*/
 }
