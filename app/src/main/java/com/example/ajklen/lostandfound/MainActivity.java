@@ -3,6 +3,7 @@ package com.example.ajklen.lostandfound;
 import android.app.Dialog;
 import android.content.Intent;
 import android.location.Location;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -36,13 +37,15 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            SlidingTabsColorsFragment fragment = new SlidingTabsColorsFragment();
+            transaction.replace(R.id.sample_content_fragment, fragment);
+            transaction.commit();
         }
 
-        textView = (TextView)findViewById(R.id.textView);
+        //textView = (TextView)findViewById(R.id.textView);
 
         googleClient =  new GoogleApiClient.Builder(MainActivity.this)
                 .addConnectionCallbacks(this)
@@ -89,7 +92,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 googleClient);
         if (lastLocation != null) {
             Log.d("latitude", String.valueOf(lastLocation.getLatitude()));
-            textView.setText(String.valueOf(lastLocation.getLatitude())+"\n"+String.valueOf(lastLocation.getLongitude()));
+            if (textView!=null) textView.setText(String.valueOf(lastLocation.getLatitude())+"\n"+String.valueOf(lastLocation.getLongitude()));
         }
     }
 
