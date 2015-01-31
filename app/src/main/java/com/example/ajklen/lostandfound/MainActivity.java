@@ -28,13 +28,10 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import com.example.ajklen.lostandfound.logger.*;
 
 import javax.xml.transform.Result;
 
 interface OnTaskCompleted {
-    // you can define any parameter as per your requirement
     public void callback(String result);
 }
 
