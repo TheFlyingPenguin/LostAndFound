@@ -29,6 +29,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     private static final int ACTIVITY_GOOGLE_PLAY = 1;
     private GoogleApiClient googleClient;
+    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,8 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+
+        textView = (TextView)findViewById(R.id.textView);
 
         googleClient =  new GoogleApiClient.Builder(MainActivity.this)
                 .addConnectionCallbacks(this)
@@ -81,12 +84,11 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     }
 
     public void getCoord(View v){
-        if (googleClient.isConnected()) Log.d("getCoord", "client is connected");
-        else Log.d("getCoord", "client is not connected");
         Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 googleClient);
         if (lastLocation != null) {
-            ((TextView)v.findViewById(R.id.textView)).setText(String.valueOf(lastLocation.getLatitude())+"\n"+String.valueOf(lastLocation.getLongitude()));
+            Log.d("latitude", String.valueOf(lastLocation.getLatitude()));
+            textView.setText(String.valueOf(lastLocation.getLatitude())+"\n"+String.valueOf(lastLocation.getLongitude()));
         }
     }
 
