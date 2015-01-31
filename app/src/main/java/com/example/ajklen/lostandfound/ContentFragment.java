@@ -16,13 +16,15 @@
 
 package com.example.ajklen.lostandfound;
 
-import com.example.ajklen.lostandfound.R;
+import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 /**
  * Simple Fragment used to display some meaningful content for each page in the sample's
@@ -30,9 +32,13 @@ import android.widget.TextView;
  */
 public class ContentFragment extends Fragment {
 
-    private static final String KEY_TITLE = "title";
-    private static final String KEY_INDICATOR_COLOR = "indicator_color";
-    private static final String KEY_DIVIDER_COLOR = "divider_color";
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+    private String mParam1;
+    private String mParam2;
+    private OnFragmentInteractionListener mListener;
+
+
 
     /**
      * @return a new instance of {@link ContentFragment}, adding the parameters into a bundle and
@@ -40,42 +46,77 @@ public class ContentFragment extends Fragment {
      */
     public static ContentFragment newInstance(CharSequence title, int indicatorColor,
                                               int dividerColor) {
-        Bundle bundle = new Bundle();
-        bundle.putCharSequence(KEY_TITLE, title);
-        bundle.putInt(KEY_INDICATOR_COLOR, indicatorColor);
-        bundle.putInt(KEY_DIVIDER_COLOR, dividerColor);
-
         ContentFragment fragment = new ContentFragment();
-        fragment.setArguments(bundle);
-
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, "Item name");
+        args.putString(ARG_PARAM2, "Location");
+        fragment.setArguments(args);
         return fragment;
     }
 
+    private RecyclerView mRecyclerView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.pager_item, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_main, container,
+                false);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        return rootView;
     }
-
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        Bundle args = getArguments();
-
-        if (args != null) {
-            TextView title = (TextView) view.findViewById(R.id.item_title);
-            title.setText("Title: " + args.getCharSequence(KEY_TITLE));
-
-            int indicatorColor = args.getInt(KEY_INDICATOR_COLOR);
-            TextView indicatorColorView = (TextView) view.findViewById(R.id.item_indicator_color);
-            indicatorColorView.setText("Indicator: #" + Integer.toHexString(indicatorColor));
-            indicatorColorView.setTextColor(indicatorColor);
-
-            int dividerColor = args.getInt(KEY_DIVIDER_COLOR);
-            TextView dividerColorView = (TextView) view.findViewById(R.id.item_divider_color);
-            dividerColorView.setText("Divider: #" + Integer.toHexString(dividerColor));
-            dividerColorView.setTextColor(dividerColor);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(
+                getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mRecyclerView.setLayoutManager(layoutManager);
+        String[] dataset = new String[100];
+        for (int i = 0; i < dataset.length; i++) {
+            dataset[i] = "item" + i;
         }
+        RecyclerAdapter mAdapter = new RecyclerAdapter(dataset, getActivity());
+        mRecyclerView.setAdapter(mAdapter);
+        super.onViewCreated(view, savedInstanceState);
+    }
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (OnFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated to
+     * the activity and potentially other fragments contained in that activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        public void onFragmentInteraction(Uri uri);
     }
 }
