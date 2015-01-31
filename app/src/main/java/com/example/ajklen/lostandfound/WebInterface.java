@@ -23,7 +23,7 @@ public class WebInterface {
     private HttpClient httpClient;
     public WebInterface (Context context){
         this.context = context;
-        final String uri = "http://138.51.236.172/project-118/login.php?user=alex&password=jin";
+        final String uri = "http://138.51.236.172/project-118/login.php?username=alex&password=jin";
         try {
             httpClient = new DefaultHttpClient();
             URI website = new URI(uri);
