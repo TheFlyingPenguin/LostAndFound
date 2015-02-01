@@ -4,15 +4,16 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.location.Location;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
 
     private static final int ACTIVITY_GOOGLE_PLAY = 1;
+    private final String LINK = "http://138.51.236.172/project-118/";
 
     public static final String MAP_NAME = "Res";
     public static final String MAP_LAT = "Lat";
@@ -100,7 +102,8 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     }
 
     public void onSubmit(View v){
-        new DownloadTask(this).execute("http://www.google.com");
+        String request = LINK+"/login.php?username="+((EditText)findViewById(R.id.nameField)).getText()+"&password="+((EditText)findViewById(R.id.password)).getText();
+        new DownloadTask(this).execute(request);
     }
 
     public void getCoord(View v){
@@ -167,7 +170,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     @Override
     public void callback(String result) {
-        Log.d("callback", result.trim());
+        Log.d("callback", result);
     }
 
     /**
