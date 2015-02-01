@@ -197,7 +197,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
      * Implementation of AsyncTask, to fetch the data in the background away from
      * the UI thread.
      */
-    private class DownloadTask extends AsyncTask<String, Void, String> {
+    public class DownloadTask extends AsyncTask<String, Void, String> {
         OnTaskCompleted listener;
         public DownloadTask(OnTaskCompleted listener){
             this.listener=listener;
