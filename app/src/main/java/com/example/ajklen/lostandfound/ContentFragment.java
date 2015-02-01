@@ -75,7 +75,7 @@ public class ContentFragment extends Fragment implements OnTaskCompleted{
         if (args != null) {
             final String LINK = "http://138.51.236.172/project-118/";
             if (args.get(KEY_TITLE).equals("Lost")) {
-                new DownloadTask(this).execute(LINK+"lost_items.php?user_id=1");
+                new DownloadTask(this).execute(LINK+"nearme.php");
             }
 
             /*TextView title = (TextView) view.findViewById(R.id.item_title);
@@ -95,7 +95,8 @@ public class ContentFragment extends Fragment implements OnTaskCompleted{
 
     @Override
     public void callback(String result) {
-        List<Node> nodes = jsonToNodes(result.trim());
+
+
 
     }
 
