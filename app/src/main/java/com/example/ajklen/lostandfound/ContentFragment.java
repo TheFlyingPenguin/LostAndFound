@@ -63,7 +63,7 @@ public class ContentFragment extends Fragment {
         Bundle args = getArguments();
 
         if (args != null) {
-            TextView title = (TextView) view.findViewById(R.id.item_title);
+            /*TextView title = (TextView) view.findViewById(R.id.item_title);
             title.setText("Title: " + args.getCharSequence(KEY_TITLE));
 
             int indicatorColor = args.getInt(KEY_INDICATOR_COLOR);
@@ -74,7 +74,7 @@ public class ContentFragment extends Fragment {
             int dividerColor = args.getInt(KEY_DIVIDER_COLOR);
             TextView dividerColorView = (TextView) view.findViewById(R.id.item_divider_color);
             dividerColorView.setText("Divider: #" + Integer.toHexString(dividerColor));
-            dividerColorView.setTextColor(dividerColor);
+            dividerColorView.setTextColor(dividerColor);*/
         }
     }
 }
