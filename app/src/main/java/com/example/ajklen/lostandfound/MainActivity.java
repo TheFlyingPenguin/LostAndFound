@@ -54,7 +54,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 .addApi(LocationServices.API)
                 .build();
 
-        new DownloadTask(this).execute("http://www.google.com");
+        //new DownloadTask(this).execute("http://www.google.com");
     }
 
     @Override
