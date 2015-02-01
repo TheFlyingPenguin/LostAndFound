@@ -18,7 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class CreateActivity extends ActionBarActivity {
+public class CreateActivity extends ActionBarActivity implements OnTaskCompleted {
 
     public static final String LAT = "lt";
     public static final String LON = "ln";
@@ -51,8 +51,8 @@ public class CreateActivity extends ActionBarActivity {
 
         context = CreateActivity.this;
 
-        currentLat = getIntent().getDoubleExtra(LAT, 0);
-        currentLon = getIntent().getDoubleExtra(LON, 0);
+        currentLat = getIntent().getDoubleExtra("Lat", 0);
+        currentLon = getIntent().getDoubleExtra("Lon", 0);
 
         latView = (TextView)findViewById(R.id.text_lat);
         lonView = (TextView)findViewById(R.id.text_lon);
@@ -123,6 +123,18 @@ public class CreateActivity extends ActionBarActivity {
         startActivityForResult(pickPhoto, ACTIVITY_PICTURE);
     }
 
+    final String LINK = "http://138.51.236.172/project-118/";
+
+    public void onSend(View v){
+        String text = "";
+        if (latView.getText().equals("")||lonView.getText().equals("")){
+            return;
+        }
+        new DownloadTask(this).execute(String.format(LINK+"add_report.php?"+"user_id=1&name=" + objText.getText() + "&latitude=" + latView.getText() +
+                "&longitude=" + lonView.getText()+"&location_string="+ locView.getText()+"&description="+descrText.getText()).replace(" ", "%20"));
+        this.onBackPressed();
+    }
+
     /*private void imageIntent(int n){
         if (n==0){
             Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -144,6 +156,11 @@ public class CreateActivity extends ActionBarActivity {
             imgUri = data.getData();
             imgView.setImageURI(imgUri);
         }
+    }
+
+    @Override
+    public void callback(String result) {
+        Log.d("create activity callback:", result);
     }
 
     /**

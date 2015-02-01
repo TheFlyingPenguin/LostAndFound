@@ -40,7 +40,7 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
 
         try {
             stream = downloadUrl(urlString);
-            str = readIt(stream, 400);
+            str = readIt(stream, 600);//stream.available());
         } finally {
             if (stream != null) {
                 stream.close();

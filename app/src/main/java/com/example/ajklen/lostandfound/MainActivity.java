@@ -22,7 +22,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
 
-public class HomeActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
 
     private static final int ACTIVITY_GOOGLE_PLAY = 1;
@@ -43,7 +43,7 @@ public class HomeActivity extends ActionBarActivity implements GoogleApiClient.C
 
         //textView = (TextView)findViewById(R.id.textView);
 
-        googleClient =  new GoogleApiClient.Builder(HomeActivity.this)
+        googleClient =  new GoogleApiClient.Builder(MainActivity.this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
@@ -64,7 +64,7 @@ public class HomeActivity extends ActionBarActivity implements GoogleApiClient.C
             }
 
             if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(HomeActivity.this, "Please update Google Play APK.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Please update Google Play APK.", Toast.LENGTH_SHORT).show();
                 this.onDestroy();
             }
         }
@@ -74,9 +74,9 @@ public class HomeActivity extends ActionBarActivity implements GoogleApiClient.C
     protected void onResume() {
         super.onResume();
 
-        int returnCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(HomeActivity.this);
+        int returnCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(MainActivity.this);
         if (returnCode != ConnectionResult.SUCCESS) {
-            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(returnCode, HomeActivity.this, ACTIVITY_GOOGLE_PLAY);
+            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(returnCode, MainActivity.this, ACTIVITY_GOOGLE_PLAY);
             if (dialog != null) dialog.show();
             //startActivityForResult(intent, ACTIVITY_GOOGLE_PLAY);
 
@@ -96,7 +96,7 @@ public class HomeActivity extends ActionBarActivity implements GoogleApiClient.C
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_activity, menu);
         return true;
     }
 
@@ -107,11 +107,19 @@ public class HomeActivity extends ActionBarActivity implements GoogleApiClient.C
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        if (id == R.id.action_add) {
+            //noinspection SimplifiableIfStatement
+            Intent intent = new Intent(MainActivity.this, CreateActivity.class);
+            Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                    googleClient);
+            if (lastLocation != null) {
+                intent.putExtra("Lat", lastLocation.getLatitude());
+                intent.putExtra("Lon", lastLocation.getLongitude());
+            }
+            startActivity(intent);
+        }else if(id == R.id.action_refresh) {
 
+        }
         return super.onOptionsItemSelected(item);
     }
 
