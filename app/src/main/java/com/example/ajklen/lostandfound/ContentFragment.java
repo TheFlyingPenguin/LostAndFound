@@ -16,22 +16,32 @@
 
 package com.example.ajklen.lostandfound;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * Simple Fragment used to display some meaningful content for each page in the sample's
  * {@link android.support.v4.view.ViewPager}.
  */
-public class ContentFragment extends Fragment {
+public class ContentFragment extends Fragment implements OnTaskCompleted{
 
     private static final String KEY_TITLE = "title";
     private static final String KEY_INDICATOR_COLOR = "indicator_color";
     private static final String KEY_DIVIDER_COLOR = "divider_color";
+
+    private LinearLayout mLayout;
+    private Context context;
 
     /**
      * @return a new instance of {@link ContentFragment}, adding the parameters into a bundle and
@@ -63,6 +73,11 @@ public class ContentFragment extends Fragment {
         Bundle args = getArguments();
 
         if (args != null) {
+            final String LINK = "http://138.51.236.172/project-118/";
+            if (args.get(KEY_TITLE).equals("Lost")) {
+                new DownloadTask(this).execute(LINK+"lost_items.php?user_id=1");
+            }
+
             /*TextView title = (TextView) view.findViewById(R.id.item_title);
             title.setText("Title: " + args.getCharSequence(KEY_TITLE));
 
@@ -76,5 +91,31 @@ public class ContentFragment extends Fragment {
             dividerColorView.setText("Divider: #" + Integer.toHexString(dividerColor));
             dividerColorView.setTextColor(dividerColor);*/
         }
+    }
+
+    @Override
+    public void callback(String result) {
+        List<Node> nodes = jsonToNodes(result.trim());
+
+    }
+
+    private class Node{
+        String place, item, description;
+        double lat, lon;
+        boolean isLost;
+
+        public Node(String place, String item, String description, double lat, double lon, boolean isLost) {
+            this.place = place;
+            this.item = item;
+            this.description = description;
+            this.lat = lat;
+            this.lon = lon;
+            this.isLost = isLost;
+        }
+    }
+
+    private List<Node> jsonToNodes (String s){
+
+        return null;
     }
 }
