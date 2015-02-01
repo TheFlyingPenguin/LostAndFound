@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.location.Location;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,19 +13,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
 
-public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class HomeActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
 
     private static final int ACTIVITY_GOOGLE_PLAY = 1;
@@ -47,7 +43,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
         //textView = (TextView)findViewById(R.id.textView);
 
-        googleClient =  new GoogleApiClient.Builder(MainActivity.this)
+        googleClient =  new GoogleApiClient.Builder(HomeActivity.this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
@@ -68,7 +64,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
             }
 
             if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(MainActivity.this, "Please update Google Play APK.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this, "Please update Google Play APK.", Toast.LENGTH_SHORT).show();
                 this.onDestroy();
             }
         }
@@ -78,9 +74,9 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     protected void onResume() {
         super.onResume();
 
-        int returnCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(MainActivity.this);
+        int returnCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(HomeActivity.this);
         if (returnCode != ConnectionResult.SUCCESS) {
-            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(returnCode, MainActivity.this, ACTIVITY_GOOGLE_PLAY);
+            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(returnCode, HomeActivity.this, ACTIVITY_GOOGLE_PLAY);
             if (dialog != null) dialog.show();
             //startActivityForResult(intent, ACTIVITY_GOOGLE_PLAY);
 
