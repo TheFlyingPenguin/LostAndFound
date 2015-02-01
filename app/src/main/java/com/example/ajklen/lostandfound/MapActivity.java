@@ -17,11 +17,6 @@ import android.widget.EditText;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +26,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by ajklen on 1/31/15.
@@ -41,7 +38,7 @@ public class MapActivity extends Activity implements GoogleApiClient.ConnectionC
     private final int NUM_SEARCH_LETTERS = 1;
     final String LINK = "http://138.51.236.172/project-118/";
     private String lastString;
-    ArrayList<String> resultArray;
+    List<String> resultArray;
     private int mChars = 200;
     final OnTaskCompleted complete = this;
     private AutoCompleteTextView autocomplete;
@@ -103,23 +100,12 @@ public class MapActivity extends Activity implements GoogleApiClient.ConnectionC
     @Override
     public void callback(String result) {
         Log.d("callback", result);
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        JsonObject jResults = gson.fromJson(result, JsonObject.class);
-        if (!jResults.isJsonNull()){
-            JsonArray predict = jResults.getAsJsonArray("predictions");
-            for (JsonElement j:predict){
-                resultArray.add(j.getAsJsonObject().get("description").getAsString());
-            }
-        }
+        resultArray = new ArrayList<String>(Arrays.asList(result.split("\\*")));
+        adapter = new ArrayAdapter<String>(this,
+                R.layout.activity_map, R.id.autoCompleteTextView1, resultArray);
+        autocomplete.setAdapter(adapter);
+        Log.i("Callback", resultArray.get(0));
 
-        if (resultArray!=null){
-
-            adapter.clear();
-            for (String r : resultArray){
-                adapter.insert(r, adapter.getCount());
-            }
-            adapter.notifyDataSetChanged();
-        }
 
     }
 
