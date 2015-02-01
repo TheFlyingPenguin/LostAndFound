@@ -13,24 +13,41 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
-public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+import javax.xml.transform.Result;
+
+interface OnTaskCompleted {
+    public void callback(String result);
+}
+
+public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, OnTaskCompleted {
 
 
     private static final int ACTIVITY_GOOGLE_PLAY = 1;
+
+    public static final String MAP_NAME = "Res";
+    public static final String MAP_LAT = "Lat";
+    public static final String MAP_LONG = "Long";
+
     private GoogleApiClient googleClient;
     private TextView textView;
+
+    private int mChars = 500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +66,8 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+
+        new DownloadTask(this).execute("http://www.google.com");
     }
 
     @Override
@@ -85,12 +104,27 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     }
 
     public void getCoord(View v){
-        Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                googleClient);
-        if (lastLocation != null) {
-            Log.d("latitude", String.valueOf(lastLocation.getLatitude()));
+        Location lastLocation = getLocation();
+        if (lastLocation!=null) {
             textView.setText(String.valueOf(lastLocation.getLatitude())+"\n"+String.valueOf(lastLocation.getLongitude()));
         }
+    }
+
+    private Location getLocation(){
+        return LocationServices.FusedLocationApi.getLastLocation(googleClient);
+    }
+
+    public void createButton(View v){
+        Location lastLocation = getLocation();
+        Intent intent = new Intent(this, CreateActivity.class);
+        if (lastLocation!=null){
+            intent.putExtra(CreateActivity.LAT, lastLocation.getLatitude());
+            intent.putExtra(CreateActivity.LON, lastLocation.getLongitude());
+        }else {
+            Log.e("getMap", "Location not found.");
+        }
+
+        startActivity(intent);
     }
 
 
@@ -131,6 +165,11 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     }
 
+    @Override
+    public void callback(String result) {
+
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -143,7 +182,113 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+
             return rootView;
         }
     }
+
+    /**
+     * Implementation of AsyncTask, to fetch the data in the background away from
+     * the UI thread.
+     */
+    private class DownloadTask extends AsyncTask<String, Void, String> {
+        OnTaskCompleted listener;
+        public DownloadTask(OnTaskCompleted listener){
+            this.listener=listener;
+        }
+
+        // required methods
+
+
+        protected void onPostExecute(Result r){
+            try {
+                listener.callback(this.get());
+            }catch (Exception e){
+                Log.e("DownloadTask", "Download read before completion!");
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... urls) {
+            try {
+                return loadFromNetwork(urls[0]);
+            } catch (IOException e) {
+                return getString(R.string.connection_error);
+            }
+        }
+    }
+
+    /** Initiates the fetch operation. */
+    private String loadFromNetwork(String urlString) throws IOException {
+        InputStream stream = null;
+        String str ="";
+
+        try {
+            stream = downloadUrl(urlString);
+            str = readIt(stream, mChars);
+        } finally {
+            if (stream != null) {
+                stream.close();
+            }
+        }
+        return str;
+    }
+
+    /**
+     * Given a string representation of a URL, sets up a connection and gets
+     * an input stream.
+     * @param urlString A string representation of a URL.
+     * @return An InputStream retrieved from a successful HttpURLConnection.
+     * @throws java.io.IOException
+     */
+    private InputStream downloadUrl(String urlString) throws IOException {
+        // BEGIN_INCLUDE(get_inputstream)
+        URL url = new URL(urlString);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setReadTimeout(10000 /* milliseconds */);
+        conn.setConnectTimeout(15000 /* milliseconds */);
+        conn.setRequestMethod("GET");
+        conn.setDoInput(true);
+        // Start the query
+        conn.connect();
+        InputStream stream = conn.getInputStream();
+        return stream;
+        // END_INCLUDE(get_inputstream)
+    }
+
+    /** Reads an InputStream and converts it to a String.
+     * @param stream InputStream containing HTML from targeted site.
+     * @param len Length of string that this method returns.
+     * @return String concatenated according to len parameter.
+     * @throws java.io.IOException
+     * @throws java.io.UnsupportedEncodingException
+     */
+    private String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
+        Reader reader = null;
+        reader = new InputStreamReader(stream, "UTF-8");
+        char[] buffer = new char[len];
+        reader.read(buffer);
+        return new String(buffer);
+    }
+
+    /** Create a chain of targets that will receive log data */
+    /*public void initializeLogging() {
+
+        // Using Log, front-end to the logging chain, emulates
+        // android.util.log method signatures.
+
+        // Wraps Android's native log framework
+        LogWrapper logWrapper = new LogWrapper();
+        Log.setLogNode(logWrapper);
+
+        // A filter that strips out everything except the message text.
+        MessageOnlyLogFilter msgFilter = new MessageOnlyLogFilter();
+        logWrapper.setNext(msgFilter);
+
+        // On screen logging via a fragment with a TextView.
+        mLogFragment =
+                (LogFragment) getSupportFragmentManager().findFragmentById(R.id.log_fragment);
+        msgFilter.setNext(mLogFragment.getLogView());
+    }*/
 }

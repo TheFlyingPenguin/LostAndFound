@@ -4,6 +4,11 @@
     <string name="app_name">LostAndFound</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+<<<<<<< HEAD
+=======
+    <string name="okay">Okay</string>
+    <string name="title_activity_create">CreateActivity</string>
+>>>>>>> Maps
     <string name="connection_error">Connection error.</string>
 
 </resources>
