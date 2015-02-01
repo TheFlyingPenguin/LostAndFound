@@ -12,13 +12,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/linear_layout_2">
 
-        <EditText
-            android:layout_width="fill_parent"
-            android:layout_weight="1"
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextView1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/locationSearch"
-            android:layout_gravity="left"
-            android:inputType="textAutoComplete" />
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="65dp"
+            android:ems="10" />
 
         <Button
             android:layout_width="fill_parent"
