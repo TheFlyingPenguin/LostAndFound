@@ -1,6 +1,7 @@
 package com.example.ajklen.lostandfound;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -77,6 +78,11 @@ public class MapActivity extends Activity implements GoogleApiClient.ConnectionC
 
 
         });
+    }
+
+    public void searchLoc(View v){
+        Intent intent = new Intent(this, CreateActivity.class);
+        startActivity(intent);
     }
 
     @Override
