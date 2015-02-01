@@ -32,5 +32,4 @@ dependencies {
 
     compile "com.android.support:recyclerview-v7:21.0.2"
     compile files('/home/ajklen/AndroidStudioProjects/LostAndFound/libs/gson-2.3.1.jar')
-    compile 'com.google.code.gson:gson:2.2.4'
 }
