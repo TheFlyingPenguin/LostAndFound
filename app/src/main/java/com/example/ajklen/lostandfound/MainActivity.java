@@ -47,7 +47,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     private GoogleApiClient googleClient;
     private TextView textView;
 
-    private int mChars = 500;
+    private int mChars = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +101,10 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
             //startActivityForResult(intent, ACTIVITY_GOOGLE_PLAY);
 
         }
+    }
+
+    public void onSubmit(View v){
+        new DownloadTask(this).execute("http://www.google.com");
     }
 
     public void getCoord(View v){
@@ -167,7 +171,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     @Override
     public void callback(String result) {
-
+        Log.d("callback", result);
     }
 
     /**
@@ -198,15 +202,8 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
             this.listener=listener;
         }
 
-        // required methods
-
-
-        protected void onPostExecute(Result r){
-            try {
-                listener.callback(this.get());
-            }catch (Exception e){
-                Log.e("DownloadTask", "Download read before completion!");
-            }
+        protected void onPostExecute(String r){
+            listener.callback(r);
         }
 
         @Override
