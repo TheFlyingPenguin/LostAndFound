@@ -32,8 +32,9 @@
         android:id="@+id/nameField"
         android:layout_gravity="center"
         android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/editText"
-        android:layout_alignStart="@+id/editText" />
+        android:layout_alignLeft="@+id/password"
+        android:layout_alignStart="@+id/password"
+        android:onClick="onSubmit"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -42,15 +43,15 @@
         android:id="@+id/buttonSubmit"
         android:layout_gravity="right|bottom"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/editText"
-        android:layout_toEndOf="@+id/editText" />
+        android:layout_toRightOf="@+id/password"
+        android:layout_toEndOf="@+id/password" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
-        android:id="@+id/editText"
+        android:id="@+id/password"
         android:layout_gravity="center_horizontal|bottom"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
