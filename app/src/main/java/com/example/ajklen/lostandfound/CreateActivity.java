@@ -126,13 +126,8 @@ public class CreateActivity extends ActionBarActivity implements OnTaskCompleted
     final String LINK = "http://138.51.236.172/project-118/";
 
     public void onSend(View v){
-        String text = "";
-        if (latView.getText().equals("")||lonView.getText().equals("")){
-            return;
-        }
-        new DownloadTask(this).execute(String.format(LINK+"add_report.php?"+"user_id=1&name=" + objText.getText() + "&latitude=" + latView.getText() +
-                "&longitude=" + lonView.getText()+"&location_string="+ locView.getText()+"&description="+descrText.getText()).replace(" ", "%20"));
-        this.onBackPressed();
+        new DownloadTask(this).execute(String.format(LINK+"add_report.php?"+"user_id=1&name=alex&latitude=" + latView.getText() +
+                "&longitude=" + latView.getText()+"&location_string="+ locView.getText()+"&description="+descrText.getText()));
     }
 
     /*private void imageIntent(int n){

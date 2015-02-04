@@ -19,7 +19,6 @@ package com.example.ajklen.lostandfound;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,6 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,7 +42,6 @@ public class ContentFragment extends Fragment implements OnTaskCompleted{
 
     private LinearLayout mLayout;
     private Context context;
-    private ArrayList<TextView> textViews;
 
     /**
      * @return a new instance of {@link ContentFragment}, adding the parameters into a bundle and
@@ -53,7 +50,6 @@ public class ContentFragment extends Fragment implements OnTaskCompleted{
     public static ContentFragment newInstance(CharSequence title, int indicatorColor,
                                               int dividerColor) {
         Bundle bundle = new Bundle();
-
         bundle.putCharSequence(KEY_TITLE, title);
         bundle.putInt(KEY_INDICATOR_COLOR, indicatorColor);
         bundle.putInt(KEY_DIVIDER_COLOR, dividerColor);
@@ -67,7 +63,6 @@ public class ContentFragment extends Fragment implements OnTaskCompleted{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        textViews = new ArrayList();
         return inflater.inflate(R.layout.pager_item, container, false);
     }
 
@@ -75,42 +70,32 @@ public class ContentFragment extends Fragment implements OnTaskCompleted{
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-        mLayout = (LinearLayout)view.findViewById(R.id.linlayout);
-        context = view.getContext();
-
-        for (TextView tv : textViews){
-            mLayout.addView(tv);
-        }
-
         Bundle args = getArguments();
 
         if (args != null) {
             final String LINK = "http://138.51.236.172/project-118/";
             if (args.get(KEY_TITLE).equals("Lost")) {
-                new DownloadTask(this).execute(LINK+"nearme.php");
+                new DownloadTask(this).execute(LINK+"lost_items.php?user_id=1");
             }
+
+            /*TextView title = (TextView) view.findViewById(R.id.item_title);
+            title.setText("Title: " + args.getCharSequence(KEY_TITLE));
+
+            int indicatorColor = args.getInt(KEY_INDICATOR_COLOR);
+            TextView indicatorColorView = (TextView) view.findViewById(R.id.item_indicator_color);
+            indicatorColorView.setText("Indicator: #" + Integer.toHexString(indicatorColor));
+            indicatorColorView.setTextColor(indicatorColor);
+
+            int dividerColor = args.getInt(KEY_DIVIDER_COLOR);
+            TextView dividerColorView = (TextView) view.findViewById(R.id.item_divider_color);
+            dividerColorView.setText("Divider: #" + Integer.toHexString(dividerColor));
+            dividerColorView.setTextColor(dividerColor);*/
         }
     }
 
     @Override
     public void callback(String result) {
-        /*result = result.trim().substring(7);
-
-        for (String a:result.split("<br/>")){
-            Log.d("split", a);
-
-            if (a.length()==0) continue;
-            String[] s = a.split("\\*");
-            Double d = Double.parseDouble(s[1].trim());
-            TextView tv = new TextView(context);
-            //tv.setText(String.format("%s\t%s\n%s\t%f%s",
-            //        s[0].trim(), s[3].trim(), s[2].trim(), (d>1000 ? d/1000 : d), (d>1000 ? " km away" : " m away")).replace(" ","%20"));
-            tv.setText("hello world");
-           // if (mLayout != null)
-                mLayout.addView(tv);
-           // else textViews.add(tv);
-        }*/
+       // List<Node> nodes = jsonToNodes(result.trim());
 
     }
 
