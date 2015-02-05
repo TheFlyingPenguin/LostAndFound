@@ -26,9 +26,7 @@
             android:name=".MainActivity"
             android:label="">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
         <activity
@@ -47,6 +45,14 @@
             android:name=".CreateActivity"
             android:label="" >
         </activity>
+        <activity android:name=".LostAndFoundActivity"
+            android:label="" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            </activity>
     </application>
 
 </manifest>

@@ -2,6 +2,9 @@ package com.example.ajklen.lostandfound;
 
 import java.util.Locale;
 
+import android.app.Dialog;
+import android.content.Intent;
+import android.location.Location;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -13,9 +16,16 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 
 
-public class LostAndFoundActivity extends ActionBarActivity implements ActionBar.TabListener {
+public class LostAndFoundActivity extends ActionBarActivity implements ActionBar.TabListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -31,6 +41,10 @@ public class LostAndFoundActivity extends ActionBarActivity implements ActionBar
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+
+    private GoogleApiClient googleClient;
+
+    private static final int ACTIVITY_GOOGLE_PLAY = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +89,45 @@ public class LostAndFoundActivity extends ActionBarActivity implements ActionBar
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+
+        googleClient =  new GoogleApiClient.Builder(LostAndFoundActivity.this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        googleClient.connect();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        int returnCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(LostAndFoundActivity.this);
+        if (returnCode != ConnectionResult.SUCCESS) {
+            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(returnCode, LostAndFoundActivity.this, ACTIVITY_GOOGLE_PLAY);
+            if (dialog != null) dialog.show();
+            //startActivityForResult(intent, ACTIVITY_GOOGLE_PLAY);
+
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == ACTIVITY_GOOGLE_PLAY) {
+            if(resultCode == RESULT_OK){
+                //String result=data.getStringExtra("result");
+            }
+
+            if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(LostAndFoundActivity.this, "Please update Google Play APK.", Toast.LENGTH_SHORT).show();
+                this.onDestroy();
+            }
+        }
     }
 
     @Override
@@ -91,6 +144,14 @@ public class LostAndFoundActivity extends ActionBarActivity implements ActionBar
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()){
             case R.id.action_add:
+                Intent intent = new Intent(LostAndFoundActivity.this, CreateActivity.class);
+                Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                        googleClient);
+                if (lastLocation != null) {
+                    intent.putExtra("Lat", lastLocation.getLatitude());
+                    intent.putExtra("Lon", lastLocation.getLongitude());
+                }
+                startActivity(intent);
                 break;
             case R.id.action_refresh:
                 break;
@@ -112,6 +173,21 @@ public class LostAndFoundActivity extends ActionBarActivity implements ActionBar
 
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 
     /**
