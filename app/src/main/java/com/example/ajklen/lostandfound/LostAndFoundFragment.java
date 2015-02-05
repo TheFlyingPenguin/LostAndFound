@@ -14,7 +14,6 @@ public class LostAndFoundFragment extends Fragment {
 
     String mText;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_lost_and_found, container, false);
