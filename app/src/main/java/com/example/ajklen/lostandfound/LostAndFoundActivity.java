@@ -206,8 +206,8 @@ public class LostAndFoundActivity extends ActionBarActivity implements ActionBar
             // Return a PlaceholderFragment (defined as a static inner class below).
             LostAndFoundFragment fragment = new LostAndFoundFragment();
             Bundle args = new Bundle();
-            String[] message = new String[] {"This is the lost place.", "This is the found place."};
-            args.putString("key", message[position]);
+            String[] message = new String[] {LostAndFoundFragment.LOST, LostAndFoundFragment.FOUND};
+            args.putString(LostAndFoundFragment.KEY_TAB, message[position%2]);
             fragment.setArguments(args);
             return fragment;
         }
