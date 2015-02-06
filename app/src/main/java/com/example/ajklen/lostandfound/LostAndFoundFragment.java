@@ -20,16 +20,17 @@ import java.util.List;
  */
 public class LostAndFoundFragment extends Fragment {
 
-    String mText;
-    ListView mList;
-
     public static String KEY_TAB = "tab_name";
     public static String LOST = "tab_lost";
     public static String FOUND = "tab_found";
 
+    private String mCurrentTab;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_lost_and_found, container, false);
+
+        mCurrentTab = getArguments().getString(KEY_TAB);
 
         final ListView listview = (ListView) rootView.findViewById(R.id.lnf_list);
         String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
@@ -62,16 +63,13 @@ public class LostAndFoundFragment extends Fragment {
                             }
                         });
             }
-
         });
 
         return rootView;
     }
 
     private void populateList(String tab){
-        TextView tv = new TextView(getActivity());
-        tv.setText("This is under" + tab);
-        mList.addView(tv);
+
 
     }
 

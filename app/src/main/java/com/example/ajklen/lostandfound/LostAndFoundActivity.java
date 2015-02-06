@@ -95,6 +95,8 @@ public class LostAndFoundActivity extends ActionBarActivity implements ActionBar
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+
+
     }
 
     @Override

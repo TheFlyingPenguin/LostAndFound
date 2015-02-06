@@ -1,6 +1,7 @@
 package com.example.ajklen.lostandfound;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -68,7 +70,7 @@ public class CreateActivity extends ActionBarActivity implements OnTaskCompleted
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_create, menu);
+        //getMenuInflater().inflate(R.menu.menu_create, menu);
         return true;
     }
 
@@ -95,7 +97,20 @@ public class CreateActivity extends ActionBarActivity implements OnTaskCompleted
     }
 
     public void setMap(View v){
-        Intent intent = new Intent(context, MapActivity.class);
+        Uri gmUri;
+
+        if (currentLat != 0 || currentLon != 0) {
+            gmUri = Uri.parse("geo:"+currentLat+","+currentLon)
+                    .buildUpon().appendQueryParameter("z", "15").build();
+        }else {
+            Log.e("getMap", "Location not found.");
+            gmUri = Uri.parse("geo:0,0");
+        }
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, gmUri);
+        intent.setPackage("com.google.android.apps.maps");
+        startActivity(intent);
+        /*Intent intent = new Intent(context, MapActivity.class);
         if (currentLat != 0 || currentLon != 0) {
             intent.putExtra(LAT, currentLat);
             intent.putExtra(LON, currentLon);
@@ -103,7 +118,7 @@ public class CreateActivity extends ActionBarActivity implements OnTaskCompleted
             Log.e("getMap", "Location not found.");
         }
 
-        startActivityForResult(intent, ACTIVITY_MAP);
+        startActivityForResult(intent, ACTIVITY_MAP);*/
     }
 
     public void chooseImage(View v){
@@ -182,4 +197,11 @@ public class CreateActivity extends ActionBarActivity implements OnTaskCompleted
 
 
     }*/
+
+    public void hideKeyboard (View v){
+        InputMethodManager inputMethodManager = (InputMethodManager) context
+                .getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(this.getCurrentFocus()
+                .getWindowToken(), 0);
+    }
 }
