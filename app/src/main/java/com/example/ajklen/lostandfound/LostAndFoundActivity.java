@@ -14,8 +14,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -156,6 +158,8 @@ public class LostAndFoundActivity extends ActionBarActivity implements ActionBar
                 startActivity(intent);
                 break;
             case R.id.action_refresh:
+                ((LostAndFoundFragment)mSectionsPagerAdapter.getRegisteredFragment(mViewPager.getCurrentItem()))
+                    .populateList();
                 break;
         }
 
@@ -197,6 +201,7 @@ public class LostAndFoundActivity extends ActionBarActivity implements ActionBar
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
+        SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -231,6 +236,23 @@ public class LostAndFoundActivity extends ActionBarActivity implements ActionBar
                 default:
                     throw new IndexOutOfBoundsException("Too many tabs, not enough page numbers");
             }
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            Fragment fragment = (Fragment) super.instantiateItem(container, position);
+            registeredFragments.put(position, fragment);
+            return fragment;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            registeredFragments.remove(position);
+            super.destroyItem(container, position, object);
+        }
+
+        public Fragment getRegisteredFragment(int position) {
+            return registeredFragments.get(position);
         }
     }
 
