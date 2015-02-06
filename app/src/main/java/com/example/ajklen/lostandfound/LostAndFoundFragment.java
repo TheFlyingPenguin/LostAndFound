@@ -28,6 +28,7 @@ public class LostAndFoundFragment extends Fragment implements OnTaskCompleted {
     private String mCurrentTab;
     private StableArrayAdapter adapter;
     private ArrayList<String> mItemList;
+    private Database mDatabase;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -70,29 +71,28 @@ public class LostAndFoundFragment extends Fragment implements OnTaskCompleted {
             }
         });
 
+        mDatabase = new Database(this, mCurrentTab, mItemList);
+
         return rootView;
     }
 
     public void populateList(){
         Log.d("populateList", "Tab: " + mCurrentTab);
 
-        adapter.clear();
-        mItemList.clear();
-        Database.fetchData(this, mCurrentTab, mItemList);
+        mDatabase.fetchData();
 
     }
 
     @Override
-    synchronized public void callback(String result) {
+    public void callback(String result) {
+        Log.d("LostAndFoundFragment callback", "the result for tab " + result);
+        Log.d("LostAndFoundFragment callback", "list is now " + mItemList);
+
         final ListView listview = (ListView) getActivity().findViewById(R.id.lnf_list);
 
-        adapter = new StableArrayAdapter(getActivity(),
-                android.R.layout.simple_list_item_1, mItemList);
+        adapter.resetData(mItemList);
         adapter.notifyDataSetChanged();
-
-        listview.clearDisappearingChildren();
-        listview.setAdapter(adapter);
-
+        //listview.setAdapter(adapter);
     }
 
     private class StableArrayAdapter extends ArrayAdapter<String> {
@@ -102,6 +102,13 @@ public class LostAndFoundFragment extends Fragment implements OnTaskCompleted {
         public StableArrayAdapter(Context context, int textViewResourceId,
                                   List<String> objects) {
             super(context, textViewResourceId, objects);
+            for (int i = 0; i < objects.size(); ++i) {
+                mIdMap.put(objects.get(i), i);
+            }
+        }
+
+        public void resetData(List<String> objects){
+            mIdMap.clear();
             for (int i = 0; i < objects.size(); ++i) {
                 mIdMap.put(objects.get(i), i);
             }

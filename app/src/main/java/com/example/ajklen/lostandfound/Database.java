@@ -12,21 +12,27 @@ public class Database implements OnTaskCompleted {
 
     final String LINK = "http://138.51.236.172/project-118/";
 
-    private static OnTaskCompleted mCallback;
-    private static ArrayList<String> mItemList;
+    private OnTaskCompleted mCallback;
+    private ArrayList<String> mItemList;
+    private String mTab;
 
-    synchronized public static void fetchData (OnTaskCompleted activity, String tab, ArrayList<String> itemList){
-        mCallback = activity;
-        mItemList = itemList;
+    public Database (OnTaskCompleted listener, String tab, ArrayList list){
+        mCallback = listener;
+        mItemList = list;
+        mTab = tab;
+    }
+
+    synchronized public void fetchData (){
 
         mItemList.clear();
 
-        Log.d("fetchData", "tab is " + tab);
+        Log.d("fetchData", "tab is " + mTab);
         for (int i=0; i<20; i++){
             mItemList.add("Object number " + i);
         }
 
-        mCallback.callback(null);
+        if (mTab.equals(LostAndFoundFragment.FOUND)) Log.d("Database", "found list: " + mItemList);
+        mCallback.callback(mTab);
 
     }
 
@@ -36,7 +42,7 @@ public class Database implements OnTaskCompleted {
             mItemList.clear();
             mItemList.addAll(Arrays.asList(result.split("<//b>")));
 
-            mCallback.callback(result);
+            mCallback.callback(null);
         }
 
 
