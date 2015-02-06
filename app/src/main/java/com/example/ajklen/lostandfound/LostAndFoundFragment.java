@@ -26,8 +26,8 @@ public class LostAndFoundFragment extends Fragment implements OnTaskCompleted {
     public static String FOUND = "tab_found";
 
     private String mCurrentTab;
-    private StableArrayAdapter adapter;
-    private ArrayList<String> mItemList;
+    private ListItemAdapter adapter;
+    private ArrayList<ListItem> mItemList;
     private Database mDatabase;
 
     @Override
@@ -37,19 +37,27 @@ public class LostAndFoundFragment extends Fragment implements OnTaskCompleted {
         mCurrentTab = getArguments().getString(KEY_TAB);
 
         final ListView listview = (ListView) rootView.findViewById(R.id.lnf_list);
-        String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
-                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-                "Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
-                "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
-                "Android", "iPhone", "WindowsMobile" };
 
-        mItemList = new ArrayList<String>();
-        for (int i = 0; i < values.length; ++i) {
-            mItemList.add(values[i]);
+        ListItem listitem_data[] = new ListItem[]
+                {
+                        new ListItem(R.drawable.ic_launcher, "Cloudy"),
+                        new ListItem(R.drawable.ic_launcher, "Showers"),
+                        new ListItem(R.drawable.ic_launcher, "Snow"),
+                        new ListItem(R.drawable.ic_launcher, "Storm"),
+                        new ListItem(R.drawable.ic_launcher, "Sunny")
+                };
+
+        adapter = new ListItemAdapter(getActivity(),
+                R.layout.list_item, listitem_data);
+
+        mItemList = new ArrayList<ListItem>();
+        for (int i = 0; i < listitem_data.length; ++i) {
+            mItemList.add(listitem_data[i]);
         }
 
-        adapter = new StableArrayAdapter(getActivity(),
-                android.R.layout.simple_list_item_1, mItemList);
+        /*adapter = new StableArrayAdapter(getActivity(),
+                android.R.layout.simple_list_item_1, mItemList); */
+
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -58,16 +66,8 @@ public class LostAndFoundFragment extends Fragment implements OnTaskCompleted {
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
 
-                final String item = (String) parent.getItemAtPosition(position);
-                view.animate().setDuration(2000).alpha(0)
-                        .withEndAction(new Runnable() {
-                            @Override
-                            public void run() {
-                                mItemList.remove(item);
-                                adapter.notifyDataSetChanged();
-                                view.setAlpha(1);
-                            }
-                        });
+                final ListItem item = (ListItem) parent.getItemAtPosition(position);
+               Log.d("OnClickListener", "item found at " + position);
             }
         });
 
@@ -88,13 +88,12 @@ public class LostAndFoundFragment extends Fragment implements OnTaskCompleted {
         Log.d("LostAndFoundFragment callback", "the result for tab " + result);
         Log.d("LostAndFoundFragment callback", "list is now " + mItemList);
 
-        final ListView listview = (ListView) getActivity().findViewById(R.id.lnf_list);
+        //final ListView listview = (ListView) getActivity().findViewById(R.id.lnf_list);
 
         adapter.resetData(mItemList);
         adapter.notifyDataSetChanged();
-        //listview.setAdapter(adapter);
     }
-
+/*
     private class StableArrayAdapter extends ArrayAdapter<String> {
 
         HashMap<String, Integer> mIdMap = new HashMap<>();
@@ -126,4 +125,5 @@ public class LostAndFoundFragment extends Fragment implements OnTaskCompleted {
         }
 
     }
+    */
 }
