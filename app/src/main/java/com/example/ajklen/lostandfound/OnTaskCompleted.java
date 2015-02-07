@@ -7,5 +7,5 @@ import java.util.ArrayList;
  */
 interface OnTaskCompleted {
     public void callback(String result);
-    //public void callback(ArrayList list);
+    //public void callback(ListItem[] list);
 }

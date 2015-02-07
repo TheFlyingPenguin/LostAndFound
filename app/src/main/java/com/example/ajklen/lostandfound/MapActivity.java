@@ -110,6 +110,7 @@ public class MapActivity extends Activity implements GoogleApiClient.ConnectionC
         Log.i("Callback", resultArray.get(0));
     }
 
+
     /**
      * A placeholder fragment containing a simple view.
      */

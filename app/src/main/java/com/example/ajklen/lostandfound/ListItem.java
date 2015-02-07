@@ -18,4 +18,9 @@ public class ListItem {
         this.description= description;
         this.distance = distance;
     }
+
+    @Override
+    public String toString(){
+        return String.format("%s at %s: %s", item, location, description);
+    }
 }

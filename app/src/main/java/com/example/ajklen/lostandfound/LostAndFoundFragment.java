@@ -46,13 +46,14 @@ public class LostAndFoundFragment extends Fragment implements OnTaskCompleted {
 
                 };
 
-        adapter = new ListItemAdapter(getActivity(),
-                R.layout.list_item, listitem_data);
 
-        mItemList = new ArrayList<ListItem>();
+        mItemList = new ArrayList<>();
         for (int i = 0; i < listitem_data.length; ++i) {
             mItemList.add(listitem_data[i]);
         }
+
+        adapter = new ListItemAdapter(getActivity(),
+                R.layout.list_item, mItemList);
 
         /*adapter = new StableArrayAdapter(getActivity(),
                 android.R.layout.simple_list_item_1, mItemList); */
@@ -84,12 +85,9 @@ public class LostAndFoundFragment extends Fragment implements OnTaskCompleted {
 
     @Override
     public void callback(String result) {
-        Log.d("LostAndFoundFragment callback", "the result for tab " + result);
+        //Log.d("LostAndFoundFragment callback", "the result for tab " + result);
         Log.d("LostAndFoundFragment callback", "list is now " + mItemList);
 
-        //final ListView listview = (ListView) getActivity().findViewById(R.id.lnf_list);
-
-        adapter.resetData(mItemList);
         adapter.notifyDataSetChanged();
     }
 /*

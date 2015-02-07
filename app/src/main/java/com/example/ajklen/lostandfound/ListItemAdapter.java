@@ -17,22 +17,15 @@ import java.util.ArrayList;
  */
 public class ListItemAdapter extends ArrayAdapter<ListItem> {
 
-    Context context;
-    int layoutResourceId;
-    ListItem data[] = null;
+    private Context context;
+    private int layoutResourceId;
+    private ArrayList<ListItem> data = null;
 
-    public ListItemAdapter(Context context, int layoutResourceId, ListItem[] data) {
+    public ListItemAdapter(Context context, int layoutResourceId, ArrayList<ListItem> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
-    }
-
-    public void resetData(ArrayList<ListItem> list){
-        data = new ListItem[list.size()];
-        for (int i=0; i<list.size(); i++){
-            data[i] = list.get(i);
-        }
     }
 
     @Override
@@ -58,7 +51,7 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
             holder = (ListItemHolder)row.getTag();
         }
 
-        ListItem listItem = data[position];
+        ListItem listItem = data.get(position);
         holder.txtItem.setText(listItem.item);
         holder.txtLocation.setText(listItem.location);
         holder.txtDescription.setText(listItem.description);
