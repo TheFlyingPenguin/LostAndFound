@@ -2,6 +2,7 @@ package com.example.ajklen.lostandfound;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,8 +46,10 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
             row = inflater.inflate(layoutResourceId, parent, false);
 
             holder = new ListItemHolder();
-            holder.imgIcon = (ImageView)row.findViewById(R.id.imgIcon);
-            holder.txtTitle = (TextView)row.findViewById(R.id.txtTitle);
+            holder.txtItem = (TextView)row.findViewById(R.id.text_item);
+            holder.txtLocation = (TextView)row.findViewById(R.id.text_location);
+            holder.txtDescription = (TextView)row.findViewById(R.id.text_description);
+            holder.txtDistance = (TextView)row.findViewById(R.id.text_distance);
 
             row.setTag(holder);
         }
@@ -55,9 +58,14 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
             holder = (ListItemHolder)row.getTag();
         }
 
-        ListItem ListItem = data[position];
-        holder.txtTitle.setText(ListItem.title);
-        holder.imgIcon.setImageResource(ListItem.icon);
+        ListItem listItem = data[position];
+        holder.txtItem.setText(listItem.item);
+        holder.txtLocation.setText(listItem.location);
+        double d = listItem.distance;
+        holder.txtDistance.setText(String.format("%.2f %s away",
+                                        d > 1000 ? d/1000 : d,
+                                        d > 1000 ? "km" : "m"));
+        holder.txtDescription.setText(listItem.description);
 
         return row;
     }
@@ -74,7 +82,9 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
 
     static class ListItemHolder
     {
-        ImageView imgIcon;
-        TextView txtTitle;
+        TextView txtItem;
+        TextView txtLocation;
+        TextView txtDescription;
+        TextView txtDistance;
     }
 }

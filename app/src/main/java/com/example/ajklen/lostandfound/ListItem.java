@@ -4,16 +4,18 @@ package com.example.ajklen.lostandfound;
  * Created by ajklen on 2/6/15.
  */
 public class ListItem {
-    public int icon;
-    public String title;
+    public String item, location, description;
+    public double distance;
 
     public ListItem(){
         super();
     }
 
-    public ListItem(int icon, String title){
+    public ListItem(String item, String location, String description, double distance){
         super();
-        this.icon = icon;
-        this.title = title;
+        this.item = item;
+        this.location = location;
+        this.description= description;
+        this.distance = distance;
     }
 }

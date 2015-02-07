@@ -40,11 +40,9 @@ public class LostAndFoundFragment extends Fragment implements OnTaskCompleted {
 
         ListItem listitem_data[] = new ListItem[]
                 {
-                        new ListItem(R.drawable.ic_launcher, "Cloudy"),
-                        new ListItem(R.drawable.ic_launcher, "Showers"),
-                        new ListItem(R.drawable.ic_launcher, "Snow"),
-                        new ListItem(R.drawable.ic_launcher, "Storm"),
-                        new ListItem(R.drawable.ic_launcher, "Sunny")
+                        new ListItem("Abhishek", "Waterloo", "I lost a magnet.", 400.2),
+                        new ListItem("Jon Snow", "Westeros", "Where go??", 12345)
+
                 };
 
         adapter = new ListItemAdapter(getActivity(),
