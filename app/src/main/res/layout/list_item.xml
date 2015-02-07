@@ -7,36 +7,55 @@
     android:padding="10dp">
 
     <TextView
+        android:layout_width="10dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/spacer1"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView android:id="@+id/text_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/spacer1"
         android:textSize="20sp"
+        android:textStyle="bold"
         android:textAllCaps="true"
-        android:text="New Text"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:id="@+id/text_item" />
+        android:singleLine="true"
+        android:ellipsize="end" />
 
-    <TextView
+    <TextView android:id="@+id/text_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/text_distance"
-        android:layout_below="@+id/text_location"
-        android:layout_alignParentEnd="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/text_description"
-        android:layout_alignBottom="@id/text_distance"
-        android:layout_alignParentLeft="true"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/text_location"
+        android:textSize="18sp"
         android:layout_alignBottom="@id/text_item"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/spacer1"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:gravity="right"/>
+
+    <TextView android:id="@+id/text_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_location"
+        android:layout_alignParentEnd="true"
+        android:gravity="right"/>
+
+    <TextView android:id="@+id/text_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_item"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/text_distance"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:ellipsize ="end"
+        android:lines = "2"
+        android:textStyle="italic"/>
+
+
+
+
 </RelativeLayout>

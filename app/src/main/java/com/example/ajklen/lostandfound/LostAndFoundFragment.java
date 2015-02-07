@@ -40,8 +40,9 @@ public class LostAndFoundFragment extends Fragment implements OnTaskCompleted {
 
         ListItem listitem_data[] = new ListItem[]
                 {
-                        new ListItem("Abhishek", "Waterloo", "I lost a magnet.", 400.2),
-                        new ListItem("Jon Snow", "Westeros", "Where go??", 12345)
+                        new ListItem("Abhishek a b c d e f", "University of Waterloo, ON, Canada", "I lost a magnet.", 400.2),
+                        new ListItem("Jon Snow", "Westeros", "Where go??", 12345),
+                        new ListItem("Brad Hedges", "Somewhere", "The quick brown fox jumps over the lazy dog and this is a long string test", 4200000)
 
                 };
 

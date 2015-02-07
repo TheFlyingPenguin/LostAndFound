@@ -61,11 +61,18 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
         ListItem listItem = data[position];
         holder.txtItem.setText(listItem.item);
         holder.txtLocation.setText(listItem.location);
-        double d = listItem.distance;
-        holder.txtDistance.setText(String.format("%.2f %s away",
-                                        d > 1000 ? d/1000 : d,
-                                        d > 1000 ? "km" : "m"));
         holder.txtDescription.setText(listItem.description);
+
+        double d = listItem.distance;
+        if (d > 1000000) {
+            holder.txtDistance.setText("over 1000 km away");
+        } else {
+            holder.txtDistance.setText(String.format("%.2f %s away",
+                    d > 1000 ? d / 1000 : d,
+                    d > 1000 ? "km" : "m"));
+        }
+
+
 
         return row;
     }
