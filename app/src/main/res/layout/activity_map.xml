@@ -18,8 +18,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="65dp"
-            android:ems="10" />
+            android:ems="10"
+            android:hint="Enter a location"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
 
         <Button
             android:layout_width="wrap_content"

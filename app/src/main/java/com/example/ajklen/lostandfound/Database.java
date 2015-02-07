@@ -3,7 +3,6 @@ package com.example.ajklen.lostandfound;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -17,7 +16,7 @@ public class Database implements OnTaskCompleted {
     private ArrayList<ListItem> mItemList;
     private String mTab;
 
-    public Database (OnTaskCompleted listener, String tab, ArrayList list){
+    public Database (OnTaskCompleted listener, String tab, ArrayList<ListItem> list){
         mCallback = listener;
         mItemList = list;
         mTab = tab;

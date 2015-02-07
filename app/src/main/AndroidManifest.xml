@@ -31,7 +31,8 @@
         </activity>
         <activity
             android:name=".MapActivity"
-            android:label="" >
+            android:label="Location finder"
+            android:windowSoftInputMode="stateVisible">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
@@ -43,10 +44,12 @@
 
         <activity
             android:name=".CreateActivity"
-            android:label="" >
+            android:label="Add a new item"
+            >
+
         </activity>
         <activity android:name=".LostAndFoundActivity"
-            android:label="" >
+            android:label="foundit" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

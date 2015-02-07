@@ -1,20 +1,14 @@
 package com.example.ajklen.lostandfound;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by ajklen on 2/3/15.
@@ -67,7 +61,7 @@ public class LostAndFoundFragment extends Fragment implements OnTaskCompleted {
                                     int position, long id) {
 
                 final ListItem item = (ListItem) parent.getItemAtPosition(position);
-               Log.d("OnClickListener", "item found at " + position);
+                //TODO detail screen for individual items
             }
         });
 
@@ -77,7 +71,6 @@ public class LostAndFoundFragment extends Fragment implements OnTaskCompleted {
     }
 
     public void populateList(){
-        Log.d("populateList", "Tab: " + mCurrentTab);
 
         mDatabase.fetchData();
 
@@ -85,9 +78,6 @@ public class LostAndFoundFragment extends Fragment implements OnTaskCompleted {
 
     @Override
     public void callback(String result) {
-        //Log.d("LostAndFoundFragment callback", "the result for tab " + result);
-        Log.d("LostAndFoundFragment callback", "list is now " + mItemList);
-
         adapter.notifyDataSetChanged();
     }
 /*

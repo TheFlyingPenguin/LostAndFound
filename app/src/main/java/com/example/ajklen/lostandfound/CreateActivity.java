@@ -97,7 +97,7 @@ public class CreateActivity extends ActionBarActivity implements OnTaskCompleted
     }
 
     public void setMap(View v){
-        Uri gmUri;
+        /*Uri gmUri;
 
         if (currentLat != 0 || currentLon != 0) {
             gmUri = Uri.parse("geo:"+currentLat+","+currentLon)
@@ -109,8 +109,10 @@ public class CreateActivity extends ActionBarActivity implements OnTaskCompleted
 
         Intent intent = new Intent(Intent.ACTION_VIEW, gmUri);
         intent.setPackage("com.google.android.apps.maps");
-        startActivity(intent);
-        /*Intent intent = new Intent(context, MapActivity.class);
+        startActivity(intent); */
+
+
+        Intent intent = new Intent(context, MapActivity.class);
         if (currentLat != 0 || currentLon != 0) {
             intent.putExtra(LAT, currentLat);
             intent.putExtra(LON, currentLon);
@@ -118,7 +120,7 @@ public class CreateActivity extends ActionBarActivity implements OnTaskCompleted
             Log.e("getMap", "Location not found.");
         }
 
-        startActivityForResult(intent, ACTIVITY_MAP);*/
+        startActivityForResult(intent, ACTIVITY_MAP);
     }
 
     public void chooseImage(View v){
