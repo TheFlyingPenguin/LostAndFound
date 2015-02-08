@@ -51,6 +51,9 @@ public class LostAndFoundActivity extends ActionBarActivity implements ActionBar
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.setTitle("FOUNDIT");
+
         setContentView(R.layout.activity_lost_and_found);
 
         mViewPager = (ViewPager)findViewById(R.id.pager);
