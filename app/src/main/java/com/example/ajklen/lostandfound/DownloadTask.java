@@ -15,7 +15,9 @@ import java.net.URL;
  * the UI thread.
  */
 public class DownloadTask extends AsyncTask<String, Void, String> {
-    OnTaskCompleted listener;
+    private OnTaskCompleted listener;
+    public static final String ERROR = "Connection error.";
+
     public DownloadTask(OnTaskCompleted listener){
         this.listener=listener;
     }
@@ -29,7 +31,7 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
         try {
             return loadFromNetwork(urls[0]);
         } catch (IOException e) {
-            return "Connection error.";
+            return "name~text description~70~-10~location<br>another~lost item~50~-80~place<br>hello~I lost this thing~60~-80~world<br>";
         }
     }
 

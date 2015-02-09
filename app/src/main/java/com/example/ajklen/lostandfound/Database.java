@@ -3,6 +3,7 @@ package com.example.ajklen.lostandfound;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Collections;
  */
 public class Database implements OnTaskCompleted {
 
-    final String LINK = "http://138.51.236.172/project-118/";
+    final String LINK = "127.0.0.1/foundit/";
 
     private OnTaskCompleted mCallback;
     private ArrayList<ListItem> mItemList;
@@ -47,20 +48,26 @@ public class Database implements OnTaskCompleted {
 
         Collections.addAll(mItemList, listitem_data);
 
-        if (mTab.equals(LostAndFoundFragment.FOUND)) Log.d("Database", "found list: " + mItemList);
+        new DownloadTask(this).execute("129.97.125.235/test.php");//"retrieve_get.php?latitude=60&longitude=-8");
+
         mCallback.callback(mTab);
 
     }
 
     @Override
     synchronized public void callback(String result) {
+        if (result.equals(DownloadTask.ERROR)) return;
+
         if (mCallback!=null && mItemList!=null){
             mItemList.clear();
-           // mItemList.addAll(Arrays.asList(result.split("<//b>")));
+            for (String s : result.split("<br>")){
+                if (s.length()==0) continue;
+                Log.d("database callback", s);
+                mItemList.add(new ListItem(s));
+            }
 
             mCallback.callback(null);
         }
-
 
     }
 }
