@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -25,6 +27,9 @@ import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 public class CreateActivity extends ActionBarActivity implements OnTaskCompleted {
 
@@ -127,10 +132,43 @@ public class CreateActivity extends ActionBarActivity implements OnTaskCompleted
 
     public void setCoord(View v){
         if (currentLat != 0 || currentLon != 0) {
-            locView.setText("Coordinates:");
+            Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+            try {
+                List<Address> listAddresses = geocoder.getFromLocation(currentLat, currentLon, 1);
+                if(listAddresses!=null && listAddresses.size()>0){
+                    Address address = listAddresses.get(0);
+                    setAddress(address);
+                } else {
+                    locView.setText("Coordinates:");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                locView.setText("Coordinates:");
+            }
+
+
             latView.setText(String.valueOf(currentLat));
             lonView.setText(String.valueOf(currentLon));
         }
+    }
+
+    public void setAddress(Address address){
+        locView.setText(address.getAddressLine(0));
+        String s;
+
+        s = address.getLocality();
+        if (s != null) locView.append(", " + s);
+
+        s = address.getSubAdminArea();
+        if (s != null) locView.append(", " + s);
+
+        s = address.getAdminArea();
+        if (s != null) locView.append(", " + s);
+
+        s = address.getCountryCode();
+        if (s != null) locView.append(", " + s);
+
+
     }
 
     public void setMap(View v){
