@@ -154,19 +154,12 @@ public class CreateActivity extends ActionBarActivity implements OnTaskCompleted
 
     public void setAddress(Address address){
         locView.setText(address.getAddressLine(0));
-        String s;
+        String[] fields = new String[] {address.getLocality(), address.getSubAdminArea(),
+                address.getAdminArea(), address.getCountryCode()};
 
-        s = address.getLocality();
-        if (s != null) locView.append(", " + s);
-
-        s = address.getSubAdminArea();
-        if (s != null) locView.append(", " + s);
-
-        s = address.getAdminArea();
-        if (s != null) locView.append(", " + s);
-
-        s = address.getCountryCode();
-        if (s != null) locView.append(", " + s);
+        for (String s : fields) {
+            if (s != null) locView.append(", " + s);
+        }
 
 
     }

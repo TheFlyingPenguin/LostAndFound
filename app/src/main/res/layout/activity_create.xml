@@ -74,7 +74,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Coordinates:"
+            android:text=""
             android:id="@+id/text_name"
             android:gravity="center_horizontal"
             android:layout_below="@id/btn_current"
