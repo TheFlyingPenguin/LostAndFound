@@ -31,7 +31,7 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
         try {
             return loadFromNetwork(urls[0]);
         } catch (IOException e) {
-            return "name~text description~70~-10~location<br>another~lost item~50~-80~place<br>hello~I lost this thing~60~-80~world<br>";
+            return ERROR;
         }
     }
 

@@ -1,6 +1,9 @@
 package com.example.ajklen.lostandfound;
 
+import android.app.Activity;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +14,7 @@ import java.util.Collections;
  */
 public class Database implements OnTaskCompleted {
 
-    final String LINK = "127.0.0.1/foundit/";
+    final String LINK = "http://bfbetatest.site90.com/";
 
     private OnTaskCompleted mCallback;
     private ArrayList<ListItem> mItemList;
@@ -23,13 +26,11 @@ public class Database implements OnTaskCompleted {
         mTab = tab;
     }
 
-    synchronized public void fetchData (){
+    synchronized public void fetchData (double lat, double lon){
 
         mItemList.clear();
 
-        Log.d("fetchData", "tab is " + mTab);
-
-        ListItem listitem_data[] = new ListItem[]
+        /*ListItem listitem_data[] = new ListItem[]
                 {
                         new ListItem("Abhishek a b c d e f", "University of Waterloo, ON, Canada", "I lost a magnet.", 400.2),
                         new ListItem("Jon Snow", "Westeros", "Where go??", 12345),
@@ -46,18 +47,32 @@ public class Database implements OnTaskCompleted {
 
                 };
 
-        Collections.addAll(mItemList, listitem_data);
+        Collections.addAll(mItemList, listitem_data);*/
 
-        new DownloadTask(this).execute("129.97.125.235/test.php");//"retrieve_get.php?latitude=60&longitude=-8");
+        String request = "retrieve_get.php?latitude=" + lat + "&longitude=" + lon;
+
+        new DownloadTask(this).execute(LINK + request);//"retrieve_get.php?latitude=60&longitude=-8");
 
         mCallback.callback(mTab);
 
     }
 
+    synchronized public void fetchData (double[] loc){
+        if (loc != null) {
+            fetchData(loc[0], loc[1]);
+        } else {
+            Toast.makeText(((Fragment)mCallback).getActivity(), "Current location not available", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
     synchronized public void callback(String result) {
-        if (result.equals(DownloadTask.ERROR)) return;
+        if (result.equals(DownloadTask.ERROR)) {
+            Toast.makeText(((Fragment)mCallback).getActivity(), "Error connecting to server", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        result = result.substring(0, result.indexOf("\n"));
         if (mCallback!=null && mItemList!=null){
             mItemList.clear();
             for (String s : result.split("<br>")){

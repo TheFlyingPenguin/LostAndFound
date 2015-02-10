@@ -123,6 +123,17 @@ public class LostAndFoundActivity extends ActionBarActivity implements ActionBar
         }
     }
 
+    public double[] getLocation(){
+        Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                googleClient);
+
+        if (lastLocation != null){
+            return new double[] {lastLocation.getLatitude(), lastLocation.getLongitude()};
+        }
+
+        return null;
+    }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == ACTIVITY_GOOGLE_PLAY) {

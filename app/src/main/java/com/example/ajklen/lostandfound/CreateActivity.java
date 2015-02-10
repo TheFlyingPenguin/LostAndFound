@@ -33,12 +33,6 @@ import java.util.Locale;
 
 public class CreateActivity extends ActionBarActivity implements OnTaskCompleted {
 
-    private static final String LINK = "http://138.51.236.172/project-118/";
-
-    public static final String LAT = "latitude";
-    public static final String LON = "longitude";
-    public static final String IMG = "image";
-
     public static final String MAP_NAME = "map_location";
     public static final String MAP_LAT = "map_latitude";
     public static final String MAP_LON = "map_longitude";
@@ -89,22 +83,22 @@ public class CreateActivity extends ActionBarActivity implements OnTaskCompleted
     @Override
     public void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
-        outState.putCharSequence(LAT, ((TextView) findViewById(R.id.text_lat)).getText());
-        outState.putCharSequence(LON, ((TextView)findViewById(R.id.text_lon)).getText());
-        outState.putByteArray(IMG, img);
+        outState.putCharSequence(LostAndFoundFragment.LAT, ((TextView) findViewById(R.id.text_lat)).getText());
+        outState.putCharSequence(LostAndFoundFragment.LON, ((TextView)findViewById(R.id.text_lon)).getText());
+        outState.putByteArray(LostAndFoundFragment.IMG, img);
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState){
         super.onRestoreInstanceState(savedInstanceState);
 
-        CharSequence s = savedInstanceState.getCharSequence(LAT);
+        CharSequence s = savedInstanceState.getCharSequence(LostAndFoundFragment.LAT);
         ((TextView)findViewById(R.id.text_lat)).setText(s);
 
-        s = savedInstanceState.getCharSequence(LON);
+        s = savedInstanceState.getCharSequence(LostAndFoundFragment.LON);
         ((TextView)findViewById(R.id.text_lon)).setText(s);
 
-        img = savedInstanceState.getByteArray(IMG);
+        img = savedInstanceState.getByteArray(LostAndFoundFragment.IMG);
         if (img != null) imgView.setImageBitmap(decodeSampledBitmapFromByte(img, 200, 200));
     }
 
@@ -146,7 +140,6 @@ public class CreateActivity extends ActionBarActivity implements OnTaskCompleted
                 locView.setText("Coordinates:");
             }
 
-
             latView.setText(String.valueOf(currentLat));
             lonView.setText(String.valueOf(currentLon));
         }
@@ -182,8 +175,8 @@ public class CreateActivity extends ActionBarActivity implements OnTaskCompleted
 
         Intent intent = new Intent(context, MapActivity.class);
         if (currentLat != 0 || currentLon != 0) {
-            intent.putExtra(LAT, currentLat);
-            intent.putExtra(LON, currentLon);
+            intent.putExtra(LostAndFoundFragment.LAT, currentLat);
+            intent.putExtra(LostAndFoundFragment.LON, currentLon);
         }else {
             Log.e("getMap", "Location not found.");
         }
@@ -213,8 +206,9 @@ public class CreateActivity extends ActionBarActivity implements OnTaskCompleted
     }
 
     public void onSend(View v){
-        new DownloadTask(this).execute(String.format(LINK+"add_report.php?"+"user_id=1&name=alex&latitude=" + latView.getText() +
-                "&longitude=" + latView.getText()+"&location_string="+ locView.getText()+"&description="+descrText.getText()));
+        //TODO send function
+        //new DownloadTask(this).execute(String.format(LINK+"add_report.php?"+"user_id=1&name=alex&latitude=" + latView.getText() +
+         //       "&longitude=" + latView.getText()+"&location_string="+ locView.getText()+"&description="+descrText.getText()));
     }
 
     private void imageIntent(int n){

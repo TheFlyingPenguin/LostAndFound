@@ -6,9 +6,11 @@
     <string name="tab_lost">Lost</string>
     <string name="tab_found">Found</string>
     <string name="okay">Okay</string>
-    <string name="title_activity_create">CreateActivity</string>
+    <string name="title_activity_create">CREATE</string>
     <string name="connection_error">Connection error.</string>
     <string name="title">foundit</string>
     <string name="name">Name</string>
+    <string name="title_activity_detail">DETAILS</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
