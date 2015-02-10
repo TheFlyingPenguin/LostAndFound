@@ -1,6 +1,7 @@
 package com.example.ajklen.lostandfound;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
@@ -19,6 +20,10 @@ public class Database implements OnTaskCompleted {
     private OnTaskCompleted mCallback;
     private ArrayList<ListItem> mItemList;
     private String mTab;
+
+    public Database (OnTaskCompleted callback){
+        mCallback = callback;
+    }
 
     public Database (OnTaskCompleted listener, String tab, ArrayList<ListItem> list){
         mCallback = listener;
@@ -65,6 +70,24 @@ public class Database implements OnTaskCompleted {
         }
     }
 
+    synchronized public void sendData(String state, String item, String location, String description, String lat, String lon){
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("http")
+                .authority("bfbetatest.site90.com")
+                .appendPath("send_get.php")
+                .appendQueryParameter("user_id", "1")
+                .appendQueryParameter("state", state)
+                .appendQueryParameter("item_name", item)
+                .appendQueryParameter("location", location)
+                .appendQueryParameter("description", description)
+                .appendQueryParameter("latitude", lat)
+                .appendQueryParameter("longitude", lon);
+        Uri uri = builder.build();
+
+        Log.i("Send Data", uri.toString());
+        new DownloadTask(this).execute(uri.toString());
+    }
+
     @Override
     synchronized public void callback(String result) {
         if (result.equals(DownloadTask.ERROR)) {
@@ -72,13 +95,25 @@ public class Database implements OnTaskCompleted {
             return;
         }
 
-        result = result.substring(0, result.indexOf("\n"));
+        if (mItemList == null){
+            mCallback.callback(null);
+            return;
+        }
+
+        int n = result.indexOf("\n");
+
+        if (n > 0 ) {
+            result = result.substring(0, n);
+        }
+
         if (mCallback!=null && mItemList!=null){
             mItemList.clear();
-            for (String s : result.split("<br>")){
+            for (String s : result.split("<br/>")){
                 if (s.length()==0) continue;
-                Log.d("database callback", s);
-                mItemList.add(new ListItem(s));
+                Log.d("database receive", s);
+                if (s.split("~").length == 5) {
+                    mItemList.add(new ListItem(s));
+                }
             }
 
             mCallback.callback(null);

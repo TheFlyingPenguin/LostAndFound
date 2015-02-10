@@ -12,6 +12,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -20,8 +21,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,14 +44,17 @@ public class CreateActivity extends ActionBarActivity implements OnTaskCompleted
     private static final int ACTIVITY_GALLERY = 2;
     private static final int ACTIVITY_CAMERA = 3;
 
-    Context context;
+    private Context context;
     private double currentLat;
     private double currentLon;
     private TextView locView, latView, lonView;
     private EditText itemText, descrText;
     private ImageView imgView;
+    private String state;
 
     private byte[] img;
+
+    private Database mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -78,13 +84,25 @@ public class CreateActivity extends ActionBarActivity implements OnTaskCompleted
         descrText = (EditText)findViewById(R.id.text_description);
 
         imgView = (ImageView)findViewById(R.id.img_btn);
+
+        state = "lost";
+
+        ((Switch)findViewById(R.id.switch_state)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                state = isChecked ? "found" : "lost";
+            }
+        });
+
+        mDatabase = new Database(this);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
-        outState.putCharSequence(LostAndFoundFragment.LAT, ((TextView) findViewById(R.id.text_lat)).getText());
-        outState.putCharSequence(LostAndFoundFragment.LON, ((TextView)findViewById(R.id.text_lon)).getText());
+        outState.putCharSequence(LostAndFoundFragment.LAT, latView.getText());
+        outState.putCharSequence(LostAndFoundFragment.LON, lonView.getText());
+        outState.putCharSequence(LostAndFoundFragment.LOCATION, locView.getText());
         outState.putByteArray(LostAndFoundFragment.IMG, img);
     }
 
@@ -93,10 +111,13 @@ public class CreateActivity extends ActionBarActivity implements OnTaskCompleted
         super.onRestoreInstanceState(savedInstanceState);
 
         CharSequence s = savedInstanceState.getCharSequence(LostAndFoundFragment.LAT);
-        ((TextView)findViewById(R.id.text_lat)).setText(s);
+        if (s!= null) latView.setText(s);
 
         s = savedInstanceState.getCharSequence(LostAndFoundFragment.LON);
-        ((TextView)findViewById(R.id.text_lon)).setText(s);
+        if (s!= null) lonView.setText(s);
+
+        s = savedInstanceState.getCharSequence(LostAndFoundFragment.LOCATION);
+        if (s!= null) locView.setText(s);
 
         img = savedInstanceState.getByteArray(LostAndFoundFragment.IMG);
         if (img != null) imgView.setImageBitmap(decodeSampledBitmapFromByte(img, 200, 200));
@@ -201,14 +222,13 @@ public class CreateActivity extends ActionBarActivity implements OnTaskCompleted
         startActivityForResult(pickPhoto, ACTIVITY_PICTURE);*/
     }
 
-    public void onCancel(View v){
-        onBackPressed();
-    }
-
     public void onSend(View v){
-        //TODO send function
-        //new DownloadTask(this).execute(String.format(LINK+"add_report.php?"+"user_id=1&name=alex&latitude=" + latView.getText() +
-         //       "&longitude=" + latView.getText()+"&location_string="+ locView.getText()+"&description="+descrText.getText()));
+        if (itemText.getText().length() == 0 || locView.getText().length() == 0){
+            Toast.makeText(this, "Please enter an item name and location", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        mDatabase.sendData(state, itemText.getText().toString(), locView.getText().toString(),
+                descrText.getText().toString(), latView.getText().toString(), lonView.getText().toString());
     }
 
     private void imageIntent(int n){
@@ -292,7 +312,7 @@ public class CreateActivity extends ActionBarActivity implements OnTaskCompleted
 
     @Override
     public void callback(String result) {
-        Log.d("create activity callback:", result);
+        onBackPressed();
     }
 
     /**

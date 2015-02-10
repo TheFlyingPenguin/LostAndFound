@@ -56,53 +56,52 @@ public class LostAndFoundFragment extends Fragment implements OnTaskCompleted {
             mItemList.add(listitem_data[i]);
         }*/
 
-        mItemList = new ArrayList<>();
+        if (mItemList == null) {
+            mItemList = new ArrayList<>();
 
-        adapter = new ListItemAdapter(getActivity(),
-                R.layout.list_item, mItemList);
+            adapter = new ListItemAdapter(getActivity(),
+                    R.layout.list_item, mItemList);
 
         /*adapter = new StableArrayAdapter(getActivity(),
                 android.R.layout.simple_list_item_1, mItemList); */
 
-        listview.setAdapter(adapter);
+            listview.setAdapter(adapter);
 
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view,
-                                    int position, long id) {
+                @Override
+                public void onItemClick(AdapterView<?> parent, final View view,
+                                        int position, long id) {
 
-                final ListItem item = (ListItem) parent.getItemAtPosition(position);
-                Intent intent = new Intent(getActivity(), DetailActivity.class);
-                intent.putExtra(ITEM, item.item)
-                        .putExtra(DESCRIPTION, item.description)
-                        .putExtra(LOCATION, item.location)
-                        .putExtra(LAT, item.latitude)
-                        .putExtra(LON, item.longitude);
+                    final ListItem item = (ListItem) parent.getItemAtPosition(position);
+                    Intent intent = new Intent(getActivity(), DetailActivity.class);
+                    intent.putExtra(ITEM, item.item)
+                            .putExtra(DESCRIPTION, item.description)
+                            .putExtra(LOCATION, item.location)
+                            .putExtra(LAT, item.latitude)
+                            .putExtra(LON, item.longitude);
 
-                startActivity(intent);
+                    startActivity(intent);
 
-            }
-        });
+                }
+            });
 
-        mDatabase = new Database(this, mCurrentTab, mItemList);
+            mDatabase = new Database(this, mCurrentTab, mItemList);
 
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mDatabase.fetchData(((LostAndFoundActivity)getActivity()).getLocation());
-            }
-        }, 50);
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mDatabase.fetchData(((LostAndFoundActivity) getActivity()).getLocation());
+                }
+            }, 50);
 
-
+        }
         return rootView;
     }
 
     public void populateList(){
-
         mDatabase.fetchData(((LostAndFoundActivity) getActivity()).getLocation());
-
     }
 
     @Override

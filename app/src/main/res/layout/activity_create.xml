@@ -137,10 +137,9 @@
 
         <EditText android:id="@+id/text_description"
             android:hint="Item description"
-            android:layout_width="wrap_content"
-            android:inputType="textCapSentences|textLongMessage"
+            android:layout_width="0dp"
+            android:inputType="textCapSentences|textMultiLine"
             android:maxLines="5"
-            android:singleLine="false"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:layout_alignParentLeft="true"
@@ -175,16 +174,6 @@
             android:layout_below="@id/text_description"
             android:layout_marginTop="15dp"
             android:onClick="onSend"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cancel"
-            android:id="@+id/buttonCancel"
-            android:layout_toLeftOf="@id/buttonSend"
-            android:layout_alignTop="@id/buttonSend"
-            android:layout_marginRight="10dp"
-            android:onClick="onCancel"/>
 
 
     </RelativeLayout>

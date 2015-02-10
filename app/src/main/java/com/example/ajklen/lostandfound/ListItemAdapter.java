@@ -66,8 +66,6 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
         } else {
             holder.txtDistance.setText("");
         }
-
-
         return row;
     }
 
