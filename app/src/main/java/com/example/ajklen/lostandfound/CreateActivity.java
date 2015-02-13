@@ -167,13 +167,15 @@ public class CreateActivity extends ActionBarActivity implements OnTaskCompleted
     }
 
     public void setAddress(Address address){
-        locView.setText(address.getAddressLine(0));
-        String[] fields = new String[] {address.getLocality(), address.getSubAdminArea(),
-                address.getAdminArea(), address.getCountryCode()};
+        locView.setText("");
+        String[] fields = new String[] {address.getFeatureName(), address.getAddressLine(0),
+                address.getAdminArea()};
 
         for (String s : fields) {
-            if (s != null) locView.append(", " + s);
+            if (s != null) locView.append(s + ", ");
         }
+
+        locView.append(address.getCountryName());
 
 
     }
